@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace MarsRover.Tests;
 
 public class RoverTests
