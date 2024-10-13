@@ -2,7 +2,7 @@
 
 var interp = new Interpreter(Console.In);
 
-var output = interp.DoIt();
+var output = interp.ProcessInput();
 foreach (var item in output)
 {
     var isLost = item.RoverState == RoverState.Lost ? "LOST":"";

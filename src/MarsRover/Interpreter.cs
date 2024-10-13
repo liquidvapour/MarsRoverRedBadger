@@ -8,7 +8,7 @@ public class Interpreter(TextReader reader)
     private readonly TextReader reader = reader;
     public World? World { get; set; } = null;
 
-    public RoverResult[] DoIt()
+    public RoverResult[] ProcessInput()
     {
         string worldSetup = reader.ReadLine() ?? throw new InvalidOperationException("world setup line not found");
         World = BuildWorld(worldSetup);

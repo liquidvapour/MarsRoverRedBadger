@@ -17,7 +17,7 @@ public class InterpreterTests
         stream.Position = 0;
         using var input = new StreamReader(stream);
         var interpreter = new Interpreter(input);
-        interpreter.DoIt();
+        interpreter.ProcessInput();
 
         Assert.That(interpreter.World, Is.Not.Null);
         Assert.That(interpreter.World!.WorldSize, Is.EqualTo((Width: 50,Height: 30)));
@@ -41,7 +41,7 @@ public class InterpreterTests
         stream.Position = 0;
         using var input = new StreamReader(stream);
         var interpreter = new Interpreter(input);
-        var result = interpreter.DoIt();
+        var result = interpreter.ProcessInput();
 
         Assert.That(result[0].Rover, Is.EqualTo(new Rover(1, 1, 'E')));
         Assert.That(result[1].Rover, Is.EqualTo(new Rover(3, 3, 'N')));
@@ -64,7 +64,7 @@ public class InterpreterTests
         stream.Position = 0;
         using var input = new StreamReader(stream);
         var interpreter = new Interpreter(input);
-        var result = interpreter.DoIt();
+        var result = interpreter.ProcessInput();
 
         Assert.That(result[0].Rover, Is.EqualTo(new Rover(1, 1, 'N')));
     }
@@ -84,7 +84,7 @@ public class InterpreterTests
         stream.Position = 0;
         using var input = new StreamReader(stream);
         var interpreter = new Interpreter(input);
-        var result = interpreter.DoIt();
+        var result = interpreter.ProcessInput();
 
         Assert.That(result[0].Rover, Is.EqualTo(new Rover(1, 2, 'N')));
     }
@@ -105,7 +105,7 @@ public class InterpreterTests
         var interpreter = new Interpreter(input);
         
         
-        Assert.Throws<InvalidOperationException>(() => interpreter.DoIt());
+        Assert.Throws<InvalidOperationException>(() => interpreter.ProcessInput());
 
     }
 
@@ -124,7 +124,7 @@ public class InterpreterTests
         using var input = new StreamReader(stream);
         var interpreter = new Interpreter(input);
 
-        Assert.Throws<InvalidOperationException>(() => interpreter.DoIt());
+        Assert.Throws<InvalidOperationException>(() => interpreter.ProcessInput());
 
     }
 
@@ -144,7 +144,7 @@ public class InterpreterTests
         using var input = new StreamReader(stream);
         var interpreter = new Interpreter(input);
 
-        Assert.Throws<InvalidOperationException>(() => interpreter.DoIt());
+        Assert.Throws<InvalidOperationException>(() => interpreter.ProcessInput());
 
     }
 }
