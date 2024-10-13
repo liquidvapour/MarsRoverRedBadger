@@ -34,7 +34,7 @@ public class Interpreter(TextReader reader)
                 throw new InvalidOperationException("rover outside of map");
             }
             var instructions = reader.ReadLine() ?? throw new InvalidOperationException("no instructions found");
-            RoverResult roverResult = new RoverResult(rover, RoverState.Active);
+            RoverResult roverResult = new(rover, RoverState.Active);
             for (int i = 0; i < instructions.Length; i++)
             {
                 var oldRover = rover;
