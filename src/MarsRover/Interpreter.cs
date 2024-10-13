@@ -1,4 +1,6 @@
 
+using System.Collections.ObjectModel;
+
 namespace MarsRover;
 
 public readonly record struct RoverResult(Rover Rover, RoverState RoverState);
@@ -27,31 +29,10 @@ public class Interpreter(TextReader reader)
         List<RoverResult> result = [];
         while (nextLine is not null)
         {
-            var rover = BuildRover(nextLine);
-
-            if (IsOutsideMap(rover, width, height))
-            {
-                throw new InvalidOperationException("rover outside of map");
-            }
+            var rover = GetRover(nextLine, width, height);
             var instructions = reader.ReadLine() ?? throw new InvalidOperationException("no instructions found");
-            RoverResult roverResult = new(rover, RoverState.Active);
-            for (int i = 0; i < instructions.Length; i++)
-            {
-                var oldRover = rover;
-                var instruction = instructions[i];
-                if (instruction == 'F' && lostRovers.Contains(rover))
-                {
-                    continue;
-                }
 
-                rover = rover.Process(instruction);
-                if (IsOutsideMap(rover, width, height))
-                {
-                    roverResult = new RoverResult(oldRover, RoverState.Lost);
-                    break;
-                }
-                roverResult = new RoverResult(rover, RoverState.Active);
-            }
+            RoverResult roverResult = DoRover(rover, instructions, width, height, lostRovers.AsReadOnly());
             if (roverResult.RoverState == RoverState.Lost)
             {
                 lostRovers.Add(roverResult.Rover);
@@ -60,6 +41,42 @@ public class Interpreter(TextReader reader)
             nextLine = reader.ReadLine();
         }
         return [.. result];
+    }
+
+    private Rover GetRover(string nextLine, int width, int height)
+    {
+        var rover = BuildRover(nextLine);
+
+        if (IsOutsideMap(rover, width, height))
+        {
+            throw new InvalidOperationException("rover outside of map");
+        }
+
+        return rover;
+    }
+
+    private static RoverResult DoRover(Rover rover, string instructions, int width, int height, ReadOnlyCollection<Rover> lostRovers)
+    {
+        RoverResult roverResult = new(rover, RoverState.Active);
+        for (int i = 0; i < instructions.Length; i++)
+        {
+            var instruction = instructions[i];
+            if (instruction == 'F' && lostRovers.Contains(rover))
+            {
+                continue;
+            }
+
+            var oldRover = rover;
+            rover = rover.Process(instruction);
+            if (IsOutsideMap(rover, width, height))
+            {
+                roverResult = new RoverResult(oldRover, RoverState.Lost);
+                break;
+            }
+            roverResult = new RoverResult(rover, RoverState.Active);
+        }
+
+        return roverResult;
     }
 
     private static bool IsOutsideMap(Rover rover, int width, int height) => 
