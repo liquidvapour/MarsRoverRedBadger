@@ -1,6 +1,6 @@
 namespace MarsRover.Tests;
 
-public class Tests
+public class RoverTests
 {
     [SetUp]
     public void Setup()
@@ -101,6 +101,19 @@ public class Tests
         Assert.That(r.X, Is.EqualTo(5));
         Assert.That(r.Y, Is.EqualTo(5));
         Assert.That(r.Orientation, Is.EqualTo('N'));
+
+    }
+
+    [Test]
+    public void CanTurnLeftFromNorthToWest()
+    {
+        var r = new Rover(5, 5, 'N');
+        
+        r = r.Process('L');
+
+        Assert.That(r.X, Is.EqualTo(5));
+        Assert.That(r.Y, Is.EqualTo(5));
+        Assert.That(r.Orientation, Is.EqualTo('W'));
 
     }
 }
