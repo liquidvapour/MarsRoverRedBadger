@@ -9,19 +9,27 @@ public class Interpreter(TextReader reader)
 
     public void DoIt()
     {
+        
         string line = reader.ReadLine() ?? throw new InvalidOperationException("world setup line not found");
         World = BuildWorld(line);
 
         line = reader.ReadLine() ?? throw new InvalidOperationException("rover setup missing");
-        Rover = BuildRover(line);
+        var rover =  BuildRover(line);
 
         var width = World.WorldSize.Width;
         var height = World.WorldSize.Height;
-        if (Rover is Rover {X: var x, Y: var y} && 
+        if (rover is {X: var x, Y: var y} && 
             (x >= width || x < 0 || y >= height || y < 0))
         {
             throw new InvalidOperationException("rover outside of map");
         }
+
+        var instructions = reader.ReadLine()?? throw new InvalidOperationException("no instructions found");
+        for (int i = 0; i < instructions.Length; i++)
+        {
+            rover = rover.Process(instructions[i]);
+        }
+        Rover = rover;
     }
 
     private Rover BuildRover(string line)

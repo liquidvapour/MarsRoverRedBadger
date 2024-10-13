@@ -11,6 +11,7 @@ public class InterpreterTests
         
         writer.WriteLine("50 50");
         writer.WriteLine("1 1 N");
+        writer.WriteLine("");
         
         writer.Flush();
         stream.Position = 0;
@@ -31,6 +32,7 @@ public class InterpreterTests
         
         writer.WriteLine("50 50");
         writer.WriteLine("1 1 N");
+        writer.WriteLine("");
         writer.Flush();
         stream.Position = 0;
         using var input = new StreamReader(stream);
@@ -71,6 +73,7 @@ public class InterpreterTests
         
         writer.WriteLine("10 10");
         writer.WriteLine("15 15 N");
+        writer.WriteLine("F");
         writer.Flush();
         stream.Position = 0;
         using var input = new StreamReader(stream);
@@ -90,6 +93,7 @@ public class InterpreterTests
 
         writer.WriteLine("10 10");
         writer.WriteLine("-10 -10 N");
+        writer.WriteLine("F");
         writer.Flush();
         stream.Position = 0;
         using var input = new StreamReader(stream);
@@ -109,6 +113,7 @@ public class InterpreterTests
 
         writer.WriteLine("10 10");
         writer.WriteLine("-1 5 N");
+        writer.WriteLine("F");
         writer.Flush();
         stream.Position = 0;
         using var input = new StreamReader(stream);
