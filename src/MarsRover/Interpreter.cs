@@ -22,7 +22,6 @@ public class Interpreter(TextReader reader)
         var width = World.WorldSize.Width;
         var height = World.WorldSize.Height;
 
-        
         var nextLine = reader.ReadLine();
         var lostRovers = new List<Rover>();
         List<RoverResult> result = [];
