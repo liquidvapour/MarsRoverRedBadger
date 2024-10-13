@@ -24,6 +24,28 @@ public class InterpreterTests
     }
 
     [Test]
+    public void CanRunInstructions()
+    {
+
+        using var stream = new MemoryStream();
+        using var writer = new StreamWriter(stream);
+        
+        writer.WriteLine("5 3");
+        writer.WriteLine("1 1 E");
+        writer.WriteLine("RFRFRFRF");
+    
+        writer.Flush();
+        stream.Position = 0;
+        using var input = new StreamReader(stream);
+        var interpreter = new Interpreter(input);
+        interpreter.DoIt();
+
+        Assert.That(interpreter.Rover, Is.Not.Null);
+        Assert.That(interpreter.Rover!, Is.EqualTo(new Rover(1, 1, 'E')));
+    }
+
+
+    [Test]
     public void CanSetupRover()
     {
 
