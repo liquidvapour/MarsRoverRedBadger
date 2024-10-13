@@ -9,7 +9,7 @@ public class InterpreterTests
         using var stream = new MemoryStream();
         using var writer = new StreamWriter(stream);
         
-        writer.WriteLine("50 50");
+        writer.WriteLine("50 30");
         writer.WriteLine("1 1 N");
         writer.WriteLine("");
         
@@ -20,7 +20,7 @@ public class InterpreterTests
         interpreter.DoIt();
 
         Assert.That(interpreter.World, Is.Not.Null);
-        Assert.That(interpreter.World!.WorldSize, Is.EqualTo((Width: 50,Height: 50)));
+        Assert.That(interpreter.World!.WorldSize, Is.EqualTo((Width: 50,Height: 30)));
     }
 
     [Test]
@@ -33,14 +33,20 @@ public class InterpreterTests
         writer.WriteLine("5 3");
         writer.WriteLine("1 1 E");
         writer.WriteLine("RFRFRFRF");
-    
+        writer.WriteLine("3 2 N");
+        writer.WriteLine("FRRFLLFFRRFLL");
+        writer.WriteLine("0 3 W");
+        writer.WriteLine("LLFFFLFLFL");
         writer.Flush();
         stream.Position = 0;
         using var input = new StreamReader(stream);
         var interpreter = new Interpreter(input);
-        var rover = interpreter.DoIt();
+        var result = interpreter.DoIt();
 
-        Assert.That(rover, Is.EqualTo(new Rover(1, 1, 'E')));
+        Assert.That(result[0].Rover, Is.EqualTo(new Rover(1, 1, 'E')));
+        Assert.That(result[1].Rover, Is.EqualTo(new Rover(3, 3, 'N')));
+        Assert.That(result[1].RoverState, Is.EqualTo(RoverState.Lost));
+        Assert.That(result[2].Rover, Is.EqualTo(new Rover(2, 3, 'S')));
     }
 
 
@@ -58,9 +64,9 @@ public class InterpreterTests
         stream.Position = 0;
         using var input = new StreamReader(stream);
         var interpreter = new Interpreter(input);
-        var rover = interpreter.DoIt();
+        var result = interpreter.DoIt();
 
-        Assert.That(rover, Is.EqualTo(new Rover(1, 1, 'N')));
+        Assert.That(result[0].Rover, Is.EqualTo(new Rover(1, 1, 'N')));
     }
 
     [Test]
@@ -78,9 +84,9 @@ public class InterpreterTests
         stream.Position = 0;
         using var input = new StreamReader(stream);
         var interpreter = new Interpreter(input);
-        var rover = interpreter.DoIt();
+        var result = interpreter.DoIt();
 
-        Assert.That(rover, Is.EqualTo(new Rover(1, 2, 'N')));
+        Assert.That(result[0].Rover, Is.EqualTo(new Rover(1, 2, 'N')));
     }
 
     [Test]

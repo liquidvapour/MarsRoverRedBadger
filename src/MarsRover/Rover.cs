@@ -1,7 +1,7 @@
 
 namespace MarsRover;
 
-public record struct Rover(int X, int Y, char Orientation)
+public readonly record struct Rover(int X, int Y, char Orientation)
 {
     
     public Rover Process(char instruction)
