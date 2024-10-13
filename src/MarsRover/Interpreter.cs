@@ -18,9 +18,9 @@ public class Interpreter(TextReader reader)
 
     public RoverResult[] DoIt()
     {
-
         string line = reader.ReadLine() ?? throw new InvalidOperationException("world setup line not found");
         World = BuildWorld(line);
+        
         var width = World.WorldSize.Width;
         var height = World.WorldSize.Height;
 
@@ -57,11 +57,10 @@ public class Interpreter(TextReader reader)
 
     private static RoverResult DoRover(Rover rover, string instructions, int width, int height, ReadOnlyCollection<Rover> lostRovers)
     {
-        RoverResult roverResult = new(rover, RoverState.Active);
         for (int i = 0; i < instructions.Length; i++)
         {
             var instruction = instructions[i];
-            if (instruction == 'F' && lostRovers.Contains(rover))
+            if (FoundScentOfLostRover(rover, lostRovers, instruction))
             {
                 continue;
             }
@@ -70,13 +69,16 @@ public class Interpreter(TextReader reader)
             rover = rover.Process(instruction);
             if (IsOutsideMap(rover, width, height))
             {
-                roverResult = new RoverResult(oldRover, RoverState.Lost);
-                break;
+                return new RoverResult(oldRover, RoverState.Lost);
             }
-            roverResult = new RoverResult(rover, RoverState.Active);
         }
 
-        return roverResult;
+        return new RoverResult(rover, RoverState.Active);
+    }
+
+    private static bool FoundScentOfLostRover(Rover rover, ReadOnlyCollection<Rover> lostRovers, char instruction)
+    {
+        return instruction == 'F' && lostRovers.Contains(rover);
     }
 
     private static bool IsOutsideMap(Rover rover, int width, int height) => 
