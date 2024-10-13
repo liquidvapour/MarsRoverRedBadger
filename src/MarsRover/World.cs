@@ -3,5 +3,5 @@ namespace MarsRover;
 
 public class World
 {
-    public (int X, int Y) WorldSize;
+    public (int Width, int Height) WorldSize;
 }
