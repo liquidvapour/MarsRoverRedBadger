@@ -3,14 +3,6 @@ using System.Collections.ObjectModel;
 
 namespace MarsRover;
 
-public readonly record struct RoverResult(Rover Rover, RoverState RoverState);
-
-public enum RoverState
-{
-    Lost,
-    Active
-}
-
 public class Interpreter(TextReader reader)
 {
     private readonly TextReader reader = reader;
@@ -18,18 +10,18 @@ public class Interpreter(TextReader reader)
 
     public RoverResult[] DoIt()
     {
-        string line = reader.ReadLine() ?? throw new InvalidOperationException("world setup line not found");
-        World = BuildWorld(line);
+        string worldSetup = reader.ReadLine() ?? throw new InvalidOperationException("world setup line not found");
+        World = BuildWorld(worldSetup);
         
         var width = World.WorldSize.Width;
         var height = World.WorldSize.Height;
 
-        var nextLine = reader.ReadLine();
+        var roverSetup = reader.ReadLine();
         var lostRovers = new List<Rover>();
         List<RoverResult> result = [];
-        while (nextLine is not null)
+        while (roverSetup is not null)
         {
-            var rover = GetRover(nextLine, width, height);
+            var rover = GetRover(roverSetup, width, height);
             var instructions = reader.ReadLine() ?? throw new InvalidOperationException("no instructions found");
 
             RoverResult roverResult = DoRover(rover, instructions, width, height, lostRovers.AsReadOnly());
@@ -38,7 +30,7 @@ public class Interpreter(TextReader reader)
                 lostRovers.Add(roverResult.Rover);
             }
             result.Add(roverResult);
-            nextLine = reader.ReadLine();
+            roverSetup = reader.ReadLine();
         }
         return [.. result];
     }
