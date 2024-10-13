@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace MarsRover.Tests;
 
 public class RoverTests
@@ -52,68 +54,39 @@ public class RoverTests
         Assert.That(r.Y, Is.EqualTo(5));
     }
 
-    [Test]
-    public void CanTurnRightFromNorthToEast()
+    [Test, Sequential]
+    public void RoverCanTurnRight(
+        [Values('N', 'E', 'S', 'W')]char startOrientation,
+        [Values('R', 'R', 'R', 'R')]char instruction, 
+        [Values('E', 'S', 'W', 'N')]char endOrientation)
     {
-        var r = new Rover(5, 5, 'N');
+        var x = 5;
+        var y = 5;
+        var r = new Rover(x, y, startOrientation);
         
-        r = r.Process('R');
+        r = r.Process(instruction);
 
-        Assert.That(r.X, Is.EqualTo(5));
-        Assert.That(r.Y, Is.EqualTo(5));
-        Assert.That(r.Orientation, Is.EqualTo('E'));
+        Assert.That(r.X, Is.EqualTo(x));
+        Assert.That(r.Y, Is.EqualTo(y));
+        Assert.That(r.Orientation, Is.EqualTo(endOrientation));
 
     }
 
-    [Test]
-    public void CanTurnRightFromEastToSouth()
+    [Test, Sequential]
+    public void RoverCanTurnLeft(
+        [Values('N', 'E', 'S', 'W')]char startOrientation,
+        [Values('L', 'L', 'L', 'L')]char instruction, 
+        [Values('W', 'N', 'E', 'S')]char endOrientation)
     {
-        var r = new Rover(5, 5, 'E');
+        var x = 5;
+        var y = 5;
+        var r = new Rover(x, y, startOrientation);
         
-        r = r.Process('R');
+        r = r.Process(instruction);
 
-        Assert.That(r.X, Is.EqualTo(5));
-        Assert.That(r.Y, Is.EqualTo(5));
-        Assert.That(r.Orientation, Is.EqualTo('S'));
-
-    }
-
-    [Test]
-    public void CanTurnRightFromSouthToWest()
-    {
-        var r = new Rover(5, 5, 'S');
-        
-        r = r.Process('R');
-
-        Assert.That(r.X, Is.EqualTo(5));
-        Assert.That(r.Y, Is.EqualTo(5));
-        Assert.That(r.Orientation, Is.EqualTo('W'));
-
-    }
-    
-    [Test]
-    public void CanTurnRightFromWestToNorth()
-    {
-        var r = new Rover(5, 5, 'W');
-        
-        r = r.Process('R');
-
-        Assert.That(r.X, Is.EqualTo(5));
-        Assert.That(r.Y, Is.EqualTo(5));
-        Assert.That(r.Orientation, Is.EqualTo('N'));
-
-    }
-
-    [Test]
-    public void CanTurnLeftFromNorthToWest()
-    {
-        var r = new Rover(5, 5, 'N');
-        
-        r = r.Process('L');
-
-        Assert.That(r.X, Is.EqualTo(5));
-        Assert.That(r.Y, Is.EqualTo(5));
-        Assert.That(r.Orientation, Is.EqualTo('W'));
+        Assert.That(r.X, Is.EqualTo(x));
+        Assert.That(r.Y, Is.EqualTo(y));
+        Assert.That(r.Orientation, Is.EqualTo(endOrientation));
 
     }
 }
