@@ -38,10 +38,9 @@ public class InterpreterTests
         stream.Position = 0;
         using var input = new StreamReader(stream);
         var interpreter = new Interpreter(input);
-        interpreter.DoIt();
+        var rover = interpreter.DoIt();
 
-        Assert.That(interpreter.Rover, Is.Not.Null);
-        Assert.That(interpreter.Rover!, Is.EqualTo(new Rover(1, 1, 'E')));
+        Assert.That(rover, Is.EqualTo(new Rover(1, 1, 'E')));
     }
 
 
@@ -59,10 +58,9 @@ public class InterpreterTests
         stream.Position = 0;
         using var input = new StreamReader(stream);
         var interpreter = new Interpreter(input);
-        interpreter.DoIt();
+        var rover = interpreter.DoIt();
 
-        Assert.That(interpreter.Rover, Is.Not.Null);
-        Assert.That(interpreter.Rover!, Is.EqualTo(new Rover(1, 1, 'N')));
+        Assert.That(rover, Is.EqualTo(new Rover(1, 1, 'N')));
     }
 
     [Test]
@@ -80,10 +78,9 @@ public class InterpreterTests
         stream.Position = 0;
         using var input = new StreamReader(stream);
         var interpreter = new Interpreter(input);
-        interpreter.DoIt();
+        var rover = interpreter.DoIt();
 
-        Assert.That(interpreter.Rover, Is.Not.Null);
-        Assert.That(interpreter.Rover!, Is.EqualTo(new Rover(1, 2, 'N')));
+        Assert.That(rover, Is.EqualTo(new Rover(1, 2, 'N')));
     }
 
     [Test]

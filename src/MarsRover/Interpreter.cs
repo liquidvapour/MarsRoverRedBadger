@@ -5,32 +5,34 @@ public class Interpreter(TextReader reader)
 {
     private readonly TextReader reader = reader;
     public World? World { get; set; } = null;
-    public Rover? Rover{ get; set; } = null;
 
-    public void DoIt()
+    public Rover DoIt()
     {
-        
+
         string line = reader.ReadLine() ?? throw new InvalidOperationException("world setup line not found");
         World = BuildWorld(line);
 
         line = reader.ReadLine() ?? throw new InvalidOperationException("rover setup missing");
-        var rover =  BuildRover(line);
+        var rover = BuildRover(line);
 
         var width = World.WorldSize.Width;
         var height = World.WorldSize.Height;
-        if (rover is {X: var x, Y: var y} && 
-            (x >= width || x < 0 || y >= height || y < 0))
+        if (IsOutsideMap(rover, width, height))
         {
             throw new InvalidOperationException("rover outside of map");
         }
 
-        var instructions = reader.ReadLine()?? throw new InvalidOperationException("no instructions found");
+        var instructions = reader.ReadLine() ?? throw new InvalidOperationException("no instructions found");
         for (int i = 0; i < instructions.Length; i++)
         {
             rover = rover.Process(instructions[i]);
         }
-        Rover = rover;
+        return rover;
     }
+
+    private static bool IsOutsideMap(Rover rover, int width, int height) => 
+        rover is { X: var x, Y: var y } &&
+        (x >= width || x < 0 || y >= height || y < 0);
 
     private Rover BuildRover(string line)
     {
