@@ -18,7 +18,7 @@ public class Interpreter(TextReader reader)
 
         var roverSetup = reader.ReadLine();
         var lostRovers = new List<Rover>();
-        List<RoverResult> result = [];
+        List<RoverResult> roverFinalStates = [];
         while (roverSetup is not null)
         {
             var rover = GetRover(roverSetup, width, height);
@@ -29,10 +29,10 @@ public class Interpreter(TextReader reader)
             {
                 lostRovers.Add(roverResult.Rover);
             }
-            result.Add(roverResult);
+            roverFinalStates.Add(roverResult);
             roverSetup = reader.ReadLine();
         }
-        return [.. result];
+        return [.. roverFinalStates];
     }
 
     private Rover GetRover(string nextLine, int width, int height)
