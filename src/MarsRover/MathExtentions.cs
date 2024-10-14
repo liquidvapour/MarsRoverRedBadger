@@ -8,6 +8,6 @@ public static class MathExtentions
         int range = max - min + 1;
         if (range <= 0) throw new ArgumentException("max must be greater than min.");
 
-        return (int)(((value - min) % range + range) % range + min);
+        return ((value - min) % range + range) % range + min;
     }
 }
