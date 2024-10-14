@@ -1,10 +1,12 @@
 namespace MarsRover;
 
+using Vector = (int X, int Y);
+
 public readonly record struct Rover
 {
     private const string Directions = "NESW";
-    private static readonly (int X, int Y)[] directionVectors = [(0, 1), (1, 0), (0, -1), (-1, 0)];
-    private static readonly (int X, int Y) NoMovement = (X: 0, Y: 0);
+    private static readonly Vector[] directionVectors = [(0, 1), (1, 0), (0, -1), (-1, 0)];
+    private static readonly Vector NoMovement = (X: 0, Y: 0);
 
     private readonly int orientationIndex;
 
@@ -18,6 +20,7 @@ public readonly record struct Rover
         Y = y;
         orientationIndex = (byte)Directions.IndexOf(orientation);
     }
+
     public Rover(int x, int y, int orientationIndex)
     {
         X = x;
@@ -35,14 +38,14 @@ public readonly record struct Rover
             GetNewOrientation(instruction, orientationIndex));
     }
 
-    private (int X, int Y) GetDirectionVector(char instruction)
+    private Vector GetDirectionVector(char instruction)
     {
         return instruction == 'F'
                     ? directionVectors[orientationIndex]
                     : NoMovement;
     }
 
-    private int GetNewOrientation(char instruction, int orientationIndex) =>
+    private static int GetNewOrientation(char instruction, int orientationIndex) =>
         instruction switch
         {
             'R' => (orientationIndex += 1).Wrap(0, 3),
