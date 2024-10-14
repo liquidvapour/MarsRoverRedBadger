@@ -1,6 +1,3 @@
-
-using System.Diagnostics;
-
 namespace MarsRover;
 
 public readonly record struct Rover
@@ -30,13 +27,13 @@ public readonly record struct Rover
     public Rover Process(char instruction)
     {
         var vector = instruction == 'F'
-            ? directionVectors[this.orientationIndex]
+            ? directionVectors[orientationIndex]
             : (X: 0, Y: 0);
 
         return new Rover(
-            this.X + vector.X,
-            this.Y + vector.Y,
-            GetNewOrientation(instruction, this.orientationIndex));
+            X + vector.X,
+            Y + vector.Y,
+            GetNewOrientation(instruction, orientationIndex));
     }
 
     private byte GetNewOrientation(char instruction, byte orientationIndex) =>
