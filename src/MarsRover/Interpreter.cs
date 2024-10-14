@@ -24,7 +24,7 @@ public class Interpreter(TextReader reader)
             var rover = GetRover(roverSetup, width, height);
             var instructions = reader.ReadLine() ?? throw new InvalidOperationException("no instructions found");
 
-            RoverResult roverResult = DoRover(rover, instructions, width, height, lostRovers.AsReadOnly());
+            RoverResult roverResult = SendInstructionsToRover(rover, instructions, width, height, lostRovers.AsReadOnly());
             if (roverResult.RoverState == RoverState.Lost)
             {
                 lostRovers.Add(roverResult.Rover);
@@ -47,7 +47,7 @@ public class Interpreter(TextReader reader)
         return rover;
     }
 
-    private static RoverResult DoRover(Rover rover, string instructions, int width, int height, ReadOnlyCollection<Rover> lostRovers)
+    private static RoverResult SendInstructionsToRover(Rover rover, string instructions, int width, int height, ReadOnlyCollection<Rover> lostRovers)
     {
         for (int i = 0; i < instructions.Length; i++)
         {
