@@ -1,52 +1,49 @@
 
+using System.Diagnostics;
+
 namespace MarsRover;
 
-public readonly record struct Rover(int X, int Y, char Orientation)
+public readonly record struct Rover
 {
-    
+    private const string DIRECTIONS = "NESW";
+    private static readonly (int X, int Y)[] directionVectors = [(0, 1), (1, 0), (0, -1), (-1, 0)];
+
+    private readonly byte orientationIndex;
+
+    public readonly int X { get; init; }
+    public readonly int Y { get; init; }
+    public readonly char Orientation { get => DIRECTIONS[orientationIndex]; }
+
+    public Rover(int x, int y, char orientation)
+    {
+        X = x;
+        Y = y;
+        orientationIndex = (byte)DIRECTIONS.IndexOf(orientation);
+    }
+    public Rover(int x, int y, byte orientationIndex)
+    {
+        X = x;
+        Y = y;
+        this.orientationIndex = orientationIndex;
+    }
+
     public Rover Process(char instruction)
     {
+        var vector = instruction == 'F'
+            ? directionVectors[this.orientationIndex]
+            : (X: 0, Y: 0);
 
-        var vector = instruction == 'F' ? GetDirectionVector(this.Orientation) : (X: 0, Y: 0);
-        return new Rover(this.X + vector.X, this.Y + vector.Y, GetNewOrientation(instruction, this.Orientation));
+        return new Rover(
+            this.X + vector.X,
+            this.Y + vector.Y,
+            GetNewOrientation(instruction, this.orientationIndex));
     }
 
-    private static readonly Dictionary<char, char> right = new Dictionary<char, char>
-    {
-        ['N'] = 'E',
-        ['E'] = 'S',
-        ['S'] = 'W',
-        ['W'] = 'N'
-    };
-
-    private static readonly Dictionary<char, char> left = new Dictionary<char, char>
-    {
-        ['N'] = 'W',
-        ['W'] = 'S',
-        ['S'] = 'E',
-        ['E'] = 'N'
-    };
-
-    private char GetNewOrientation(char instruction, char orientation)
-    {
-        return instruction switch
+    private byte GetNewOrientation(char instruction, byte orientationIndex) =>
+        instruction switch
         {
-            'R' => right[orientation],
-            'L' => left[orientation],
-            _ => orientation
+            'R' => (orientationIndex += 1).Wrap(0, 3),
+            'L' => (orientationIndex -= 1).Wrap(0, 3),
+            _ => orientationIndex
         };
-    }
-
-    private (int X, int Y) GetDirectionVector(char orientation)
-    {
-        return orientation switch
-        {
-            'N' => (0, 1),
-            'S' => (0, -1),
-            'W' => (-1, 0),
-            'E' => (1, 0),
-            _ => throw new ArgumentOutOfRangeException(nameof(orientation))
-        };
-
-    }
 }
