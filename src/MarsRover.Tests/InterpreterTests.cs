@@ -20,7 +20,8 @@ public class InterpreterTests
         interpreter.ProcessInput();
 
         Assert.That(interpreter.World, Is.Not.Null);
-        Assert.That(interpreter.World!.WorldSize, Is.EqualTo((Width: 50,Height: 30)));
+        var world = (World) interpreter.World;
+        Assert.That(world.WorldSize, Is.EqualTo((Width: 50,Height: 30)));
     }
 
     [Test]

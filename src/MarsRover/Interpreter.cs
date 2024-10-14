@@ -11,10 +11,10 @@ public class Interpreter(TextReader reader)
     public RoverResult[] ProcessInput()
     {
         string worldSetup = reader.ReadLine() ?? throw new InvalidOperationException("world setup line not found");
-        World = BuildWorld(worldSetup);
+        var world = BuildWorld(worldSetup);
+        World = world;
         
-        var width = World.WorldSize.Width;
-        var height = World.WorldSize.Height;
+        (var width, var height) = world.WorldSize;
 
         var roverSetup = reader.ReadLine();
         var lostRovers = new List<Rover>();
@@ -83,7 +83,7 @@ public class Interpreter(TextReader reader)
         return new Rover(int.Parse(parts[0]), int.Parse(parts[1]), parts[2][0]);
     }
 
-    private World BuildWorld(string line) => new World { WorldSize = ReadWorldSize(line) };
+    private World BuildWorld(string line) => new(ReadWorldSize(line));
 
     private (int Width, int Height) ReadWorldSize(string line)
     {

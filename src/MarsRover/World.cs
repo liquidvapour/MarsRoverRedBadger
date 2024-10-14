@@ -1,7 +1,4 @@
 
 namespace MarsRover;
 
-public class World
-{
-    public (int Width, int Height) WorldSize;
-}
+public readonly record struct World((int Width, int Height) WorldSize);
