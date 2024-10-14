@@ -1,6 +1,4 @@
-# Red Badger Code Test
-
-# Martian Robots
+# Red Badger Code Test: Martian Robots
 
 This repository contains an implementation of **Martian Robots**.
 
