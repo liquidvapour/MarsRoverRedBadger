@@ -40,7 +40,7 @@ public readonly record struct Rover
 
     private Vector GetDirectionVector(char instruction)
     {
-        return instruction == 'F'
+        return instruction == Instructions.Forward
                     ? directionVectors[orientationIndex]
                     : NoMovement;
     }
@@ -48,8 +48,8 @@ public readonly record struct Rover
     private static int GetNewOrientation(char instruction, int orientationIndex) =>
         instruction switch
         {
-            'R' => (orientationIndex += 1).Wrap(0, 3),
-            'L' => (orientationIndex -= 1).Wrap(0, 3),
+            Instructions.Right => (orientationIndex += 1).Wrap(0, 3),
+            Instructions.Left => (orientationIndex -= 1).Wrap(0, 3),
             _ => orientationIndex
         };
 }

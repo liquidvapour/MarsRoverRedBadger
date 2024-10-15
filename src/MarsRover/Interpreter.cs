@@ -1,20 +1,18 @@
-
 using System.Collections.ObjectModel;
 
 namespace MarsRover;
 
 public class Interpreter(TextReader reader)
 {
-    private readonly TextReader reader = reader;
-    public World? World { get; set; } = null;
+    public World? World { get; private set; }
 
     public RoverResult[] ProcessInput()
     {
-        string worldSetup = reader.ReadLine() ?? throw new InvalidOperationException("world setup line not found");
+        var worldSetup = reader.ReadLine() ?? throw new InvalidOperationException("world setup line not found");
         var world = BuildWorld(worldSetup);
         World = world;
         
-        (var width, var height) = world.WorldSize;
+        var (width, height) = world.WorldSize;
 
         var roverSetup = reader.ReadLine();
         var lostRovers = new List<Rover>();
@@ -39,24 +37,15 @@ public class Interpreter(TextReader reader)
     {
         var rover = BuildRover(nextLine);
 
-        if (IsOutsideMap(rover, width, height))
-        {
-            throw new InvalidOperationException("rover outside of map");
-        }
-
-        return rover;
+        return !IsOutsideMap(rover, width, height) 
+            ? rover
+            : throw new InvalidOperationException("rover outside of map");;
     }
 
     private static RoverResult SendInstructionsToRover(Rover rover, string instructions, int width, int height, ReadOnlyCollection<Rover> lostRovers)
     {
-        for (int i = 0; i < instructions.Length; i++)
+        foreach (var instruction in OnlyGoodInstructions(rover, instructions, lostRovers))
         {
-            var instruction = instructions[i];
-            if (FoundScentOfLostRover(rover, lostRovers, instruction))
-            {
-                continue;
-            }
-
             var oldRover = rover;
             rover = rover.Process(instruction);
             if (IsOutsideMap(rover, width, height))
@@ -68,9 +57,15 @@ public class Interpreter(TextReader reader)
         return new RoverResult(rover, RoverState.Active);
     }
 
-    private static bool FoundScentOfLostRover(Rover rover, ReadOnlyCollection<Rover> lostRovers, char instruction)
+    private static IEnumerable<char> OnlyGoodInstructions(in Rover rover, string instructions, ReadOnlyCollection<Rover> lostRovers)
     {
-        return instruction == 'F' && lostRovers.Contains(rover);
+        var copyRover = rover;
+        return instructions.Where(i => !(i == Instructions.Forward && FoundScentOfLostRover(copyRover, lostRovers)));
+    }
+
+    private static bool FoundScentOfLostRover(in Rover rover, ReadOnlyCollection<Rover> lostRovers)
+    {
+        return lostRovers.Contains(rover);
     }
 
     private static bool IsOutsideMap(Rover rover, int width, int height) => 
